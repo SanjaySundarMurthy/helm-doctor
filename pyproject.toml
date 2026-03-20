@@ -1,3 +1,47 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "helm-doctor"
+version = "1.0.0"
+description = "The ultimate Helm chart linter, validator & security scanner"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Sai Sandeep", email = "ssan@example.com"}
+]
+keywords = ["helm", "kubernetes", "linter", "validator", "security", "scanner", "devops"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: System :: Systems Administration",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+]
+dependencies = [
+    "click>=8.0.0",
+    "rich>=13.0.0",
+    "pyyaml>=6.0",
+    "jsonschema>=4.0.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/ssan/helm-doctor"
+
+[project.scripts]
+helm-doctor = "helm_doctor.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["helm_doctor*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
