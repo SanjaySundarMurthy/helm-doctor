@@ -41,7 +41,7 @@ pip install helm-doctor
 
 **From source:**
 ```bash
-git clone https://github.com/ssan/helm-doctor.git
+git clone https://github.com/sanjaysundarmurthy/helm-doctor.git
 cd helm-doctor
 pip install -e .
 ```
@@ -199,4 +199,4 @@ MIT License — see [LICENSE](LICENSE) for details.
 
 ---
 
-**Made with ❤️ for the Helm community by [Sai Sandeep](https://github.com/ssan)**
+**Made with ❤️ for the Helm community by [sanjaysundarmurthy](https://github.com/sanjaysundarmurthy)**
