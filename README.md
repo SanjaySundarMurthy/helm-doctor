@@ -1,4 +1,8 @@
-# 🏥 helm-doctor
+﻿# 🏥 helm-doctor
+
+[![CI](https://github.com/SanjaySundarMurthy/helm-doctor/actions/workflows/ci.yml/badge.svg)](https://github.com/SanjaySundarMurthy/helm-doctor/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/pypi/pyversions/helm-doctor)](https://pypi.org/project/helm-doctor/)
+[![PyPI](https://img.shields.io/pypi/v/helm-doctor)](https://pypi.org/project/helm-doctor/)
 
 **The Ultimate Helm Chart Linter, Validator & Security Scanner**
 
@@ -43,7 +47,7 @@ pip install helm-doctor
 ```bash
 git clone https://github.com/sanjaysundarmurthy/helm-doctor.git
 cd helm-doctor
-pip install -e .
+pip install helm-doctor
 ```
 
 ## ⚡ Quick Start
@@ -200,3 +204,32 @@ MIT License — see [LICENSE](LICENSE) for details.
 ---
 
 **Made with ❤️ for the Helm community by [sanjaysundarmurthy](https://github.com/sanjaysundarmurthy)**
+
+
+## 🐳 Docker
+
+Run without installing Python:
+
+```bash
+# Build the image
+docker build -t helm-doctor .
+
+# Run
+docker run --rm helm-doctor --help
+
+# Example with volume mount
+docker run --rm -v ${PWD}:/workspace helm-doctor [command] /workspace
+```
+
+Or pull from the container registry:
+
+```bash
+docker pull ghcr.io/SanjaySundarMurthy/helm-doctor:latest
+docker run --rm ghcr.io/SanjaySundarMurthy/helm-doctor:latest --help
+```
+
+## 🔗 Links
+
+- **PyPI**: [https://pypi.org/project/helm-doctor/](https://pypi.org/project/helm-doctor/)
+- **GitHub**: [https://github.com/SanjaySundarMurthy/helm-doctor](https://github.com/SanjaySundarMurthy/helm-doctor)
+- **Issues**: [https://github.com/SanjaySundarMurthy/helm-doctor/issues](https://github.com/SanjaySundarMurthy/helm-doctor/issues)
