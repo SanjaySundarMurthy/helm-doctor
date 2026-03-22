@@ -1,12 +1,10 @@
 """JSON & HTML report exporters for helm-doctor."""
 import json
-import os
 from datetime import datetime, timezone
-from collections import Counter
 
 from helm_doctor.models import (
-    AnalysisReport, Category, Severity,
-    SEVERITY_COLORS, SEVERITY_ICONS, CATEGORY_ICONS,
+    AnalysisReport,
+    Severity,
 )
 
 
@@ -66,8 +64,6 @@ def export_html(report: AnalysisReport, output_path: str):
         "Info": report.info_count,
     }
 
-    cat_counts = Counter(i.category.value for i in report.issues)
-
     grade_color_map = {
         "A+": "#22c55e", "A": "#22c55e", "A-": "#4ade80",
         "B+": "#facc15", "B": "#eab308", "B-": "#ca8a04",
@@ -98,9 +94,6 @@ def export_html(report: AnalysisReport, output_path: str):
             <td><code>{issue.file_path}{line_str}</code></td>
             <td>{issue.message}{suggestion_html}</td>
         </tr>"""
-
-    cat_labels = json.dumps(list(cat_counts.keys()))
-    cat_values = json.dumps(list(cat_counts.values()))
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
@@ -197,7 +190,7 @@ def export_html(report: AnalysisReport, output_path: str):
         </div>
 
         <div class="footer">
-            helm-doctor v1.0.0 &bull; 75+ rules &bull; 11 categories &bull; Made with ❤️ for the Helm community
+            helm-doctor v1.0.0 &bull; 105+ rules &bull; 11 categories &bull; Made with ❤️ for the Helm community
         </div>
     </div>
 

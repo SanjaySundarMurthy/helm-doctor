@@ -1,8 +1,11 @@
 """Tests for helm-doctor analyzers."""
 import os
+
 from helm_doctor.analyzers.chart_analyzer import analyze_chart_yaml, get_chart_metadata
+from helm_doctor.analyzers.dependency_analyzer import analyze_dependencies
 from helm_doctor.analyzers.security_analyzer import analyze_security
 from helm_doctor.analyzers.structure_analyzer import analyze_structure
+from helm_doctor.analyzers.template_analyzer import analyze_templates
 from helm_doctor.analyzers.values_analyzer import analyze_values_yaml
 from helm_doctor.models import Severity
 
@@ -118,3 +121,78 @@ class TestValuesAnalyzer:
         (tmp_path / "Chart.yaml").write_text("apiVersion: v2\nname: t\nversion: 1.0.0\n")
         issues = analyze_values_yaml(str(tmp_path))
         assert len(issues) > 0  # Should detect missing values.yaml
+
+
+class TestTemplateAnalyzer:
+    def test_no_templates_dir(self, tmp_path):
+        (tmp_path / "Chart.yaml").write_text("apiVersion: v2\nname: t\nversion: 1.0.0\n")
+        issues = analyze_templates(str(tmp_path))
+        assert any(i.rule_id == "HD-T001" for i in issues)
+
+    def test_empty_templates_dir(self, tmp_path):
+        (tmp_path / "Chart.yaml").write_text("apiVersion: v2\nname: t\nversion: 1.0.0\n")
+        (tmp_path / "templates").mkdir()
+        issues = analyze_templates(str(tmp_path))
+        assert any(i.rule_id == "HD-T002" for i in issues)
+
+    def test_missing_helpers(self, tmp_chart):
+        chart = tmp_chart(templates={"deployment.yaml": "apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: test\n"})
+        issues = analyze_templates(chart)
+        assert any(i.rule_id == "HD-T003" for i in issues)
+
+    def test_hardcoded_namespace(self, bad_chart):
+        issues = analyze_templates(bad_chart)
+        assert any(i.rule_id == "HD-T006" for i in issues)
+
+    def test_good_chart_no_critical(self, good_chart):
+        issues = analyze_templates(good_chart)
+        crits = [i for i in issues if i.severity == Severity.CRITICAL]
+        assert len(crits) == 0
+
+
+class TestDependencyAnalyzer:
+    def test_no_dependencies(self, good_chart):
+        issues = analyze_dependencies(good_chart)
+        assert len(issues) == 0
+
+    def test_missing_chart_yaml(self, tmp_path):
+        issues = analyze_dependencies(str(tmp_path))
+        assert len(issues) == 0
+
+    def test_dependencies_without_lock(self, tmp_chart):
+        chart = tmp_chart(
+            chart_yaml=(
+                "apiVersion: v2\nname: test\nversion: 1.0.0\n"
+                "dependencies:\n"
+                "  - name: redis\n"
+                "    version: ~17.0.0\n"
+                "    repository: https://charts.bitnami.com/bitnami\n"
+            ),
+        )
+        issues = analyze_dependencies(chart)
+        rule_ids = [i.rule_id for i in issues]
+        assert "HD-D003" in rule_ids  # missing Chart.lock
+
+    def test_dependency_missing_version(self, tmp_chart):
+        chart = tmp_chart(
+            chart_yaml=(
+                "apiVersion: v2\nname: test\nversion: 1.0.0\n"
+                "dependencies:\n"
+                "  - name: redis\n"
+                "    repository: https://charts.bitnami.com/bitnami\n"
+            ),
+        )
+        issues = analyze_dependencies(chart)
+        assert any(i.rule_id == "HD-D006" for i in issues)
+
+    def test_dependency_missing_repo(self, tmp_chart):
+        chart = tmp_chart(
+            chart_yaml=(
+                "apiVersion: v2\nname: test\nversion: 1.0.0\n"
+                "dependencies:\n"
+                "  - name: redis\n"
+                "    version: ~17.0.0\n"
+            ),
+        )
+        issues = analyze_dependencies(chart)
+        assert any(i.rule_id == "HD-D008" for i in issues)

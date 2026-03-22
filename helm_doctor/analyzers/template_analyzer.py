@@ -274,7 +274,7 @@ def analyze_templates(chart_path: str) -> list:
 
         # Rule HD-T015: Empty template check
         stripped = content.strip()
-        if not stripped or all(l.strip().startswith("#") or l.strip().startswith("{{-") for l in lines if l.strip()):
+        if not stripped or all(line.strip().startswith("#") or line.strip().startswith("{{-") for line in lines if line.strip()):
             if not filename.startswith("_") and not filename == "NOTES.txt":
                 issues.append(Issue(
                     rule_id="HD-T015",

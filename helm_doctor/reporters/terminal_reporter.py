@@ -3,16 +3,18 @@ from collections import Counter
 
 from rich.console import Console
 from rich.panel import Panel
+from rich.rule import Rule
 from rich.table import Table
 from rich.text import Text
-from rich.columns import Columns
-from rich.rule import Rule
 
 from helm_doctor.models import (
-    AnalysisReport, Category, Severity,
-    SEVERITY_COLORS, SEVERITY_ICONS, CATEGORY_ICONS,
+    CATEGORY_ICONS,
+    SEVERITY_COLORS,
+    SEVERITY_ICONS,
+    AnalysisReport,
+    Category,
+    Severity,
 )
-
 
 GRADE_COLORS = {
     "A+": "bright_green", "A": "green", "A-": "green",
@@ -30,7 +32,7 @@ BANNER = r"""[bright_cyan]
  |_| |_|\___|_|_| |_| |_| |____/ \___/ \___|\__\___/|_|
 [/bright_cyan]
 [dim]  The Ultimate Helm Chart Linter, Validator & Security Scanner[/dim]
-[dim]  v1.0.0 — 75+ rules across 11 categories[/dim]
+[dim]  v1.0.0 — 105+ rules across 11 categories[/dim]
 """
 
 
@@ -92,18 +94,18 @@ def _print_score(report: AnalysisReport, console: Console):
     score_text = Text()
     score_text.append("  Health Score: ", style="bold")
     score_text.append(f"{report.score}", style=f"bold {grade_color}")
-    score_text.append(f" / 100", style="dim")
+    score_text.append(" / 100", style="dim")
     score_text.append("    Grade: ", style="bold")
     score_text.append(f" {report.grade} ", style=f"bold white on {grade_color}")
-    score_text.append(f"    Rules: ", style="bold")
+    score_text.append("    Rules: ", style="bold")
     score_text.append(f"{report.passed_rules}", style="green")
-    score_text.append(f" passed", style="dim")
-    score_text.append(f" / ", style="dim")
+    score_text.append(" passed", style="dim")
+    score_text.append(" / ", style="dim")
     score_text.append(f"{report.failed_rules}", style="red")
-    score_text.append(f" failed", style="dim")
-    score_text.append(f" / ", style="dim")
+    score_text.append(" failed", style="dim")
+    score_text.append(" / ", style="dim")
     score_text.append(f"{report.total_rules}", style="bold")
-    score_text.append(f" total", style="dim")
+    score_text.append(" total", style="dim")
 
     # Score bar
     bar_width = 40
@@ -289,5 +291,5 @@ def _print_footer(report: AnalysisReport, console: Console):
     else:
         console.print(f"[yellow]  💡 {total} suggestion(s) to improve your chart.[/yellow]")
 
-    console.print(f"[dim]  helm-doctor v1.0.0 | 75+ rules | 11 categories | Made with ❤️  for the Helm community[/dim]")
+    console.print("[dim]  helm-doctor v1.0.0 | 105+ rules | 11 categories | Made with ❤️  for the Helm community[/dim]")
     console.print()

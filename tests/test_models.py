@@ -1,5 +1,5 @@
 """Tests for helm-doctor models."""
-from helm_doctor.models import AnalysisReport, Issue, Severity, Category, SEVERITY_SCORES
+from helm_doctor.models import SEVERITY_SCORES, AnalysisReport, Category, Issue, Severity
 
 
 class TestSeverity:

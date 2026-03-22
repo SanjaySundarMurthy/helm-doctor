@@ -1,5 +1,6 @@
 """Tests for helm-doctor CLI commands."""
 from click.testing import CliRunner
+
 from helm_doctor.cli import main
 
 

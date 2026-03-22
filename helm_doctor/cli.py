@@ -1,7 +1,7 @@
 """helm-doctor CLI — The ultimate Helm chart linter, validator & security scanner."""
 import os
-import sys
 import shutil
+import sys
 
 import click
 from rich.console import Console
@@ -12,16 +12,15 @@ if sys.platform == "win32":
     sys.stderr.reconfigure(encoding="utf-8")
 
 from helm_doctor import __version__
-from helm_doctor.models import AnalysisReport, Severity
 from helm_doctor.analyzers.chart_analyzer import analyze_chart_yaml, get_chart_metadata
-from helm_doctor.analyzers.values_analyzer import analyze_values_yaml
-from helm_doctor.analyzers.template_analyzer import analyze_templates
-from helm_doctor.analyzers.security_analyzer import analyze_security
 from helm_doctor.analyzers.dependency_analyzer import analyze_dependencies
+from helm_doctor.analyzers.security_analyzer import analyze_security
 from helm_doctor.analyzers.structure_analyzer import analyze_structure
+from helm_doctor.analyzers.template_analyzer import analyze_templates
+from helm_doctor.analyzers.values_analyzer import analyze_values_yaml
+from helm_doctor.models import AnalysisReport, Severity
+from helm_doctor.reporters.export_reporter import export_html, export_json
 from helm_doctor.reporters.terminal_reporter import print_report
-from helm_doctor.reporters.export_reporter import export_json, export_html
-
 
 console = Console()
 
@@ -42,7 +41,7 @@ def main(ctx):
     """🏥 helm-doctor — The ultimate Helm chart linter, validator & security scanner.
 
     Analyze Helm charts for best practices, security issues, and common mistakes.
-    75+ rules across 11 categories.
+    105+ rules across 11 categories.
 
     \b
     Examples:
@@ -146,7 +145,7 @@ def rules():
     """List all available lint rules."""
     from rich.table import Table
 
-    table = Table(title="📋 helm-doctor Rules (75+)", show_lines=False, padding=(0, 1))
+    table = Table(title="📋 helm-doctor Rules", show_lines=False, padding=(0, 1))
     table.add_column("Rule ID", style="bold cyan", width=10)
     table.add_column("Category", width=22)
     table.add_column("Severity", width=10)
@@ -207,7 +206,7 @@ def _run_analysis(chart_path: str, categories: tuple) -> AnalysisReport:
 def _count_rules(report: AnalysisReport):
     """Count total/passed/failed rules from issues."""
     # Total rules available
-    report.total_rules = 75
+    report.total_rules = len(_get_all_rules())
     failed_rules = len(set(i.rule_id for i in report.issues))
     report.failed_rules = failed_rules
     report.passed_rules = report.total_rules - failed_rules

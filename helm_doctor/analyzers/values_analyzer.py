@@ -1,12 +1,10 @@
 """Values.yaml analyzer — validates values structure, naming, and best practices."""
 import os
 import re
-from typing import Any
 
 import yaml
 
 from helm_doctor.models import Category, Issue, Severity
-
 
 # Reserved top-level keys in Helm
 HELM_RESERVED_KEYS = {
@@ -104,8 +102,8 @@ def analyze_values_yaml(chart_path: str) -> list:
 
     # Rule HD-V030: Check for comments/documentation
     lines = raw_content.split("\n")
-    comment_count = sum(1 for l in lines if l.strip().startswith("#"))
-    total_lines = len([l for l in lines if l.strip()])
+    comment_count = sum(1 for line in lines if line.strip().startswith("#"))
+    total_lines = len([line for line in lines if line.strip()])
     if total_lines > 10 and comment_count < 3:
         issues.append(Issue(
             rule_id="HD-V030",

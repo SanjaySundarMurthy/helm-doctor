@@ -1,5 +1,4 @@
 """Shared test fixtures for helm-doctor."""
-import os
 import pytest
 
 

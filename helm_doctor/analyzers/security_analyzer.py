@@ -6,7 +6,6 @@ import yaml
 
 from helm_doctor.models import Category, Issue, Severity
 
-
 # Dangerous Kubernetes resource types
 SENSITIVE_RESOURCES = {
     "ClusterRole": "cluster-wide RBAC role",

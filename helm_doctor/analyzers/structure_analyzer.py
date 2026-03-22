@@ -143,7 +143,6 @@ def analyze_structure(chart_path: str) -> list:
         ))
 
     # Rule HD-X007: Check for crds/ directory usage
-    crds_dir = os.path.join(chart_path, "crds")
     templates_dir = os.path.join(chart_path, "templates")
 
     if os.path.isdir(templates_dir):

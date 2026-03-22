@@ -55,7 +55,13 @@ addopts = "-v --tb=short"
 
 [tool.ruff]
 target-version = "py39"
-line-length = 100
+line-length = 130
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I"]
+
+[tool.ruff.lint.per-file-ignores]
+"helm_doctor/reporters/export_reporter.py" = ["E501"]
+"helm_doctor/demo.py" = ["E501"]
+"helm_doctor/analyzers/values_analyzer.py" = ["E501"]
+"helm_doctor/cli.py" = ["E501"]

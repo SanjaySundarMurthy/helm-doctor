@@ -1,12 +1,13 @@
 """Chart.yaml analyzer — validates chart metadata, versioning, and structure."""
 import os
 import re
-from typing import Optional
 
 import yaml
 
 from helm_doctor.models import (
-    AnalysisReport, Category, Issue, RuleResult, Severity,
+    Category,
+    Issue,
+    Severity,
 )
 
 # Valid Helm API versions
